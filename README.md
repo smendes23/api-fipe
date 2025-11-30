@@ -86,8 +86,9 @@ O argumento `--build` força a reconstrução das imagens das APIs, garantindo q
 
 Após a inicialização, os seguintes serviços estarão disponíveis:
 
-- **API-1 Gateway**: `http://localhost:8080`
-- **API-2 Processor**: `http://localhost:8081`
+- **Gateway**: `http://localhost:8080`
+- **Processor Brand**: `http://localhost:8081`
+- **Processor Vehicles**: `http://localhost:8082`
 - **PostgreSQL**: `localhost:5432`
 - **Redis**: `localhost:6379`
 - **Kafka**: `localhost:9092`
@@ -116,22 +117,31 @@ Os testes unitários e de integração foram desenvolvidos seguindo a prática d
 Navegue até o diretório da API-1 e execute o comando Maven:
 
 ```bash
-cd api-1-gateway
+cd gateway
 mvn test
 ```
 
-### Executando os Testes da API-2
+### Executando os Testes da API-1(processor-brand)
+
+Navegue até o diretório da API-1 e execute o comando Maven:
+
+```bash
+cd ../processor-brand
+mvn test
+```
+
+### Executando os Testes da API-2(processor-vehicles)
 
 Navegue até o diretório da API-2 e execute o comando Maven:
 
 ```bash
-cd ../api-2-processor
+cd ../processor-vehicle
 mvn test
 ```
 
-## Documentação dos Endpoints (API-1)
+## Documentação dos Endpoints
 
-A seguir, uma descrição detalhada dos endpoints disponíveis na `api-1-gateway`.
+A seguir, uma descrição detalhada dos endpoints disponíveis na `gateway`.
 
 **URL Base**: `http://localhost:8080`
 
