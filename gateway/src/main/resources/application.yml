@@ -1,0 +1,78 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/fipe_db
+    username: fipe_user
+    password: fipe_pass
+  flyway:
+    url: jdbc:postgresql://localhost:5432/fipe_db
+    user: fipe_user
+    password: fipe_pass
+    enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        max.in.flight.requests.per.connection: 1
+        enable.idempotence: true
+processor:
+  brand:
+    base-url: http://localhost:8081
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    com.example.oauthserver: DEBUG
+
+# Configurações JWT
+jwt:
+  private-key: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQRZAX3q/5Ya9M
+    j99HfJ74qI3ORN28NN8V3FnO+EWxDo7ZJbm8s1mP6ov5W7+vDZ8keB3jX353mZov
+    woy+habHR9W8OFcWQSPsYbNfi4J6kaAjBnzm+VdQKrjf9zdP7gkrhsKhEaplcz42
+    UIXtr3A8kgKJ0jecVsaYz6lIfp6HujuEDDOguhPP7er3SLF/2DZoOtkZi17j7KGx
+    sdAZsvqKuSFK8b+POhembO+59JK/OX10rUabD5oUVL2w35v1g5FSnZSLCpFFKURN
+    LOJwoGRimuKH2JnU4vsSk11C224GfOR6DElAfLj0q46zQkg6OPpJTDy9mtQhDIMq
+    iNFRw917AgMBAAECggEACjS2dGz9q5dNW0+bjem98opz9H0sbnoaynvzTLCe3afM
+    eTifiu8w/tvsAwqrcH0W5NccA9XcoSi+RQPgGL/85bwP7brHDbigdYduHkr8WFxF
+    gCHjwf/K9ws45wS6yahs+5yNcg4nDvSgQlIc1gJoWhd/l1hdUERyU++tKHfH9fek
+    F5GlNhYEr+qVOjuBzDF1ruaWJJ9LoUumZvo6PjoqF6ytChBk6C0OrRLNw9ysj4Nc
+    a4Ro8WbX3GQEoOb0jOSWmiWiLciZtMH3RE2EEZkq5q533rMKcRd3A/xGkFDv8eXG
+    P/xulktzUxSB//Yp1GgqyDIjwe3fT8cRHZY13puhMQKBgQDUDreHKRx1E/wgAQlO
+    Pn7DR8mrEaikQyDgdPZmgpH6/qerwGmm7LFpWNFjYRrWq427s40r+PyCq/OIZoVp
+    8nvA4eRh72eS+eFZDvVPOdPj8Pv7UMW8tZtHXq5pJ4Om7sasLGBhi8+G+38uD+zr
+    jpdmfrptilux/EwY/KuQuZIQywKBgQD7bgSedYZcnfNgKRYNyVH3bCYBp1FPuZq3
+    GnwaMwQdz68JJsaDpQw4UROmR9YnWzhWRTlqj5kb2mE05fJK5QHgPqUBEpY9cEEZ
+    +T4KxnawrrtG8A5ZQ/Sr+XYHOxGb5qulaRQVuOX7SZPrQyVkHjg4h7xrg076J8Ak
+    74rKytpAEQKBgEhsqlPYP6bg53hKwlHd2E97wi3R/yXy41Slvc3vBEqUFNH9Clh/
+    eGxBcGofrRnqR6L2xN1i0WMTtT49vY0cyxVqUST9rgMtosBW8oNXfb3Y/UatJIu5
+    /smWVb0GSNmHrYT6NwS5ymwQkzQ5LjKZZa4U1Dk7Suvz/k1+Zl4scu2XAoGAdug3
+    AwGtw4tnmCiWJ3r4ar0Y1Fte1wd+Je4+lt1dqwOXUgqmg4fA2bluQ4thukcnw5UF
+    bGHxFP0YT74X8lePpY+61WEG8JNwFmqLbukhJLneE9Rf1NOQmOxnZ1AGKebTcmzZ
+    dNR233qSnAarXkf0are24lm9Ng0qj81BpFp/ESECgYBYTtEqzG8hzIPCRvjBr1kK
+    ELo5rOixuk85eZq8+Lm9RzfsCCIcraDrqCRGTQ6lhQKx5JvaoM4J+dMp0JyBUc7X
+    qN+91pgFWoJ6lCusXmfW6t6twyLCA5ijb464vyX8ORiXVxmIVXJaO8QO88rUUr04
+    1IVYF/WJ723gjhw5xPtQDg==
+    -----END PRIVATE KEY-----
+  public-key: |
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0EWQF96v+WGvTI/fR3ye
+    +KiNzkTdvDTfFdxZzvhFsQ6O2SW5vLNZj+qL+Vu/rw2fJHgd419+d5maL8KMvoWm
+    x0fVvDhXFkEj7GGzX4uCepGgIwZ85vlXUCq43/c3T+4JK4bCoRGqZXM+NlCF7a9w
+    PJICidI3nFbGmM+pSH6eh7o7hAwzoLoTz+3q90ixf9g2aDrZGYte4+yhsbHQGbL6
+    irkhSvG/jzoXpmzvufSSvzl9dK1Gmw+aFFS9sN+b9YORUp2UiwqRRSlETSzicKBk
+    Yprih9iZ1OL7EpNdQttuBnzkegxJQHy49KuOs0JIOjj6SUw8vZrUIQyDKojRUcPd
+    ewIDAQAB
+    -----END PUBLIC KEY-----
+  issuer: http://localhost:8080
+  expiration: 3600000 # 1 hora em milissegundos

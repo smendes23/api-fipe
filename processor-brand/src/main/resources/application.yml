@@ -1,0 +1,61 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: processor-brand
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/.well-known/jwks.json
+          issuer-uri: http://localhost:8080
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/fipe_db
+    username: fipe_user
+    password: fipe_pass
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        max.in.flight.requests.per.connection: 1
+        enable.idempotence: true
+# FIPE API Configuration
+fipe:
+  api:
+    base-url: https://parallelum.com.br/fipe/api/v1
+    timeout: 10000
+    max-retries: 3
+# Kafka Topics
+kafka:
+  topics:
+    brands: fipe.brands
+# Cache Configuration
+cache:
+  ttl:
+    brands: 3600 # 1 hour in seconds
+    vehicles: 1800 # 30 minutes in seconds
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    com.example.oauthserver: DEBUG

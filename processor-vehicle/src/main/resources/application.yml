@@ -1,0 +1,91 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: processor-vehicle
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/fipe_db
+    username: fipe_user
+    password: fipe_pass
+    pool:
+      initial-size: 10
+      max-size: 50
+      max-idle-time: 30m
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: fipe-processor-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        max.in.flight.requests.per.connection: 1
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.fipe.processor.infrastructure.messaging.dto.BrandMessage
+      max-poll-records: 50
+      max-poll-interval-ms: 300000
+      session-timeout-ms: 10000
+      heartbeat-interval-ms: 3000
+      request-timeout-ms: 40000
+      fetch-max-wait-ms: 500
+      fetch-min-bytes: 1
+      isolation-level: read_committed
+      enable-auto-commit: false
+  resilience4j:
+    ratelimiter:
+      instances:
+        fipeApiLimiter:
+          limitForPeriod: 1
+          limitRefreshPeriod: 5s
+          timeoutDuration: 10s
+          allow-health-indicator: true
+          register-health-indicator: true
+    retry:
+      instances:
+        kafkaConsumerRetry:
+          max-attempts: 3
+          wait-duration: 2s
+          enable-exponential-backoff: true
+          exponential-backoff-multiplier: 2
+          max-wait-duration: 30s
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/.well-known/jwks.json
+          issuer-uri: http://localhost:8080
+# FIPE API Configuration
+fipe:
+  api:
+    base-url: https://parallelum.com.br/fipe/api/v1
+    timeout: 60000
+    initial-delay-ms: 5000
+    max-retries: 3
+    rate-limit:
+      requests-per-second: 2
+      max-wait-seconds: 3600
+# Kafka Topics
+kafka:
+  topics:
+    brands: fipe.brands
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    com.example.resourceserver: DEBUG
