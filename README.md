@@ -154,7 +154,7 @@ Autentica um usuário e retorna um token JWT para ser usado nas requisições su
 - **Endpoint**: `POST /api/v1/auth/login`
 - **Descrição**: Realiza o login com `username` e `password`.
 - **Credenciais Padrão**:
-  - Admin: `username: admin`, `password: admin123`
+  - Admin: `username: admin`, `password: admin`
   - User: `username: user`, `password: user123`
 
 **Exemplo de Requisição (cURL):**
@@ -164,7 +164,7 @@ curl -X POST "http://localhost:8080/api/v1/auth/login" \
 -H "Content-Type: application/json" \
 -d '{
   "username": "admin",
-  "password": "admin123"
+  "password": "admin"
 }'
 ```
 
