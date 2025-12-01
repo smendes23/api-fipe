@@ -1,7 +1,7 @@
 package br.com.fipe.gateway.presentation.controllers;
 
-import br.com.fipe.gateway.application.ports.JwtServicePort;
-import br.com.fipe.gateway.application.ports.UserServicePort;
+import br.com.fipe.gateway.application.ports.input.JwtServicePort;
+import br.com.fipe.gateway.application.ports.input.UserServicePort;
 import br.com.fipe.gateway.config.TestSecurityConfig;
 import br.com.fipe.gateway.domain.dto.User;
 import br.com.fipe.gateway.presentation.dto.request.LoginRequest;

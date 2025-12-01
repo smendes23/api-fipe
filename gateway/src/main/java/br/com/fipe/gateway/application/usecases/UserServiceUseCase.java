@@ -1,6 +1,6 @@
 package br.com.fipe.gateway.application.usecases;
 
-import br.com.fipe.gateway.application.ports.UserServicePort;
+import br.com.fipe.gateway.application.ports.input.UserServicePort;
 import br.com.fipe.gateway.domain.dto.User;
 import br.com.fipe.gateway.domain.entities.UserEntity;
 import br.com.fipe.gateway.domain.repositories.UserRepository;

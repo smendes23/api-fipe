@@ -43,14 +43,12 @@ class RedisCacheAdapterTest {
 
     @BeforeEach
     void setUp() {
-        // Configura o redisTemplate para retornar o valueOperations mockado
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
     }
 
     @Test
     @DisplayName("Should get value from cache successfully")
     void shouldGetValueFromCacheSuccessfully() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         String cachedJson = "{\"id\":\"1\",\"name\":\"Test\"}";
         TestObject expectedObject = new TestObject("1", "Test");
@@ -58,10 +56,8 @@ class RedisCacheAdapterTest {
         when(valueOperations.get(key)).thenReturn(Mono.just(cachedJson));
         when(objectMapper.readValue(cachedJson, TestObject.class)).thenReturn(expectedObject);
 
-        // Act
         Mono<TestObject> result = redisCacheAdapter.get(key, TestObject.class);
 
-        // Assert
         StepVerifier.create(result)
                 .expectNext(expectedObject)
                 .verifyComplete();
@@ -73,15 +69,12 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should return empty Mono when key not found in cache")
     void shouldReturnEmptyMonoWhenKeyNotFound() {
-        // Arrange
         String key = "test:key";
 
         when(valueOperations.get(key)).thenReturn(Mono.empty());
 
-        // Act
         Mono<TestObject> result = redisCacheAdapter.get(key, TestObject.class);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -91,7 +84,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle deserialization error")
     void shouldHandleDeserializationError() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         String cachedJson = "invalid-json";
         JsonProcessingException jsonException = new JsonProcessingException("Invalid JSON") {};
@@ -99,10 +91,8 @@ class RedisCacheAdapterTest {
         when(valueOperations.get(key)).thenReturn(Mono.just(cachedJson));
         when(objectMapper.readValue(cachedJson, TestObject.class)).thenThrow(jsonException);
 
-        // Act
         Mono<TestObject> result = redisCacheAdapter.get(key, TestObject.class);
 
-        // Assert
         StepVerifier.create(result)
                 .expectErrorMatches(throwable ->
                         throwable instanceof RuntimeException &&
@@ -117,7 +107,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should put value in cache successfully")
     void shouldPutValueInCacheSuccessfully() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         TestObject value = new TestObject("1", "Test");
         Duration ttl = Duration.ofMinutes(30);
@@ -126,10 +115,8 @@ class RedisCacheAdapterTest {
         when(objectMapper.writeValueAsString(value)).thenReturn(serializedJson);
         when(valueOperations.set(key, serializedJson, ttl)).thenReturn(Mono.just(true));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.put(key, value, ttl);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -140,7 +127,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle serialization error when putting value")
     void shouldHandleSerializationErrorWhenPuttingValue() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         TestObject value = new TestObject("1", "Test");
         Duration ttl = Duration.ofMinutes(30);
@@ -148,10 +134,8 @@ class RedisCacheAdapterTest {
 
         when(objectMapper.writeValueAsString(value)).thenThrow(jsonException);
 
-        // Act
         Mono<Void> result = redisCacheAdapter.put(key, value, ttl);
 
-        // Assert
         StepVerifier.create(result)
                 .expectErrorMatches(throwable ->
                         throwable instanceof RuntimeException &&
@@ -166,7 +150,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle Redis error when putting value")
     void shouldHandleRedisErrorWhenPuttingValue() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         TestObject value = new TestObject("1", "Test");
         Duration ttl = Duration.ofMinutes(30);
@@ -176,10 +159,8 @@ class RedisCacheAdapterTest {
         when(objectMapper.writeValueAsString(value)).thenReturn(serializedJson);
         when(valueOperations.set(key, serializedJson, ttl)).thenReturn(Mono.error(redisError));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.put(key, value, ttl);
 
-        // Assert
         StepVerifier.create(result)
                 .expectError(RuntimeException.class)
                 .verify();
@@ -191,15 +172,12 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should delete key successfully")
     void shouldDeleteKeySuccessfully() {
-        // Arrange
         String key = "test:key";
 
         when(redisTemplate.delete(key)).thenReturn(Mono.just(1L));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.delete(key);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -209,16 +187,13 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle Redis error when deleting key")
     void shouldHandleRedisErrorWhenDeletingKey() {
-        // Arrange
         String key = "test:key";
         RuntimeException redisError = new RuntimeException("Redis connection failed");
 
         when(redisTemplate.delete(key)).thenReturn(Mono.error(redisError));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.delete(key);
 
-        // Assert
         StepVerifier.create(result)
                 .expectError(RuntimeException.class)
                 .verify();
@@ -229,7 +204,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should delete by pattern successfully")
     void shouldDeleteByPatternSuccessfully() {
-        // Arrange
         String pattern = "test:*";
         String key1 = "test:1";
         String key2 = "test:2";
@@ -238,10 +212,8 @@ class RedisCacheAdapterTest {
         when(redisTemplate.delete(key1)).thenReturn(Mono.just(1L));
         when(redisTemplate.delete(key2)).thenReturn(Mono.just(1L));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.deleteByPattern(pattern);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -253,15 +225,12 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle empty keys when deleting by pattern")
     void shouldHandleEmptyKeysWhenDeletingByPattern() {
-        // Arrange
         String pattern = "test:*";
 
         when(redisTemplate.keys(pattern)).thenReturn(Flux.empty());
 
-        // Act
         Mono<Void> result = redisCacheAdapter.deleteByPattern(pattern);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -272,7 +241,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle Redis error when deleting by pattern")
     void shouldHandleRedisErrorWhenDeletingByPattern() {
-        // Arrange
         String pattern = "test:*";
         String key = "test:1";
         RuntimeException redisError = new RuntimeException("Redis connection failed");
@@ -280,10 +248,8 @@ class RedisCacheAdapterTest {
         when(redisTemplate.keys(pattern)).thenReturn(Flux.just(key));
         when(redisTemplate.delete(key)).thenReturn(Mono.error(redisError));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.deleteByPattern(pattern);
 
-        // Assert
         StepVerifier.create(result)
                 .expectError(RuntimeException.class)
                 .verify();
@@ -295,15 +261,12 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle null value when getting from cache")
     void shouldHandleNullValueWhenGettingFromCache() {
-        // Arrange
         String key = "test:key";
 
         when(valueOperations.get(key)).thenReturn(Mono.empty());
 
-        // Act
         Mono<TestObject> result = redisCacheAdapter.get(key, TestObject.class);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -313,7 +276,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should put null value in cache")
     void shouldPutNullValueInCache() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         Duration ttl = Duration.ofMinutes(30);
         String serializedJson = "null";
@@ -321,10 +283,8 @@ class RedisCacheAdapterTest {
         when(objectMapper.writeValueAsString(null)).thenReturn(serializedJson);
         when(valueOperations.set(key, serializedJson, ttl)).thenReturn(Mono.just(true));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.put(key, null, ttl);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -335,7 +295,6 @@ class RedisCacheAdapterTest {
     @Test
     @DisplayName("Should handle complex object serialization")
     void shouldHandleComplexObjectSerialization() throws JsonProcessingException {
-        // Arrange
         String key = "test:key";
         ComplexObject complexObject = new ComplexObject("parent", new TestObject("1", "child"));
         Duration ttl = Duration.ofMinutes(30);
@@ -344,10 +303,8 @@ class RedisCacheAdapterTest {
         when(objectMapper.writeValueAsString(complexObject)).thenReturn(serializedJson);
         when(valueOperations.set(key, serializedJson, ttl)).thenReturn(Mono.just(true));
 
-        // Act
         Mono<Void> result = redisCacheAdapter.put(key, complexObject, ttl);
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
 
@@ -355,7 +312,6 @@ class RedisCacheAdapterTest {
         verify(valueOperations, times(1)).set(key, serializedJson, ttl);
     }
 
-    // Test helper classes
     static class TestObject {
         private String id;
         private String name;

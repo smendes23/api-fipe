@@ -1,6 +1,7 @@
 package com.fipe.processor.infrastructure.adapters.output;
 
 import com.fipe.processor.application.ports.output.FipeServicePort;
+import com.fipe.processor.domain.dto.FipeModelsWrapper;
 import com.fipe.processor.domain.entities.Vehicle;
 import com.fipe.processor.infrastructure.adapters.output.dto.FipeVehicleResponse;
 import java.time.Duration;
@@ -51,7 +52,7 @@ public class FipeApiAdapter implements FipeServicePort {
                 .doOnError(error -> log.error("Error fetching vehicles for brand {}: {}", brandCode, error.getMessage()));
     }
 
-    private void checkRateLimit() {
+    void checkRateLimit() {
         long now = System.currentTimeMillis();
         long lastReset = lastResetTime.get();
 
@@ -82,7 +83,7 @@ public class FipeApiAdapter implements FipeServicePort {
         }
     }
 
-    private Flux<Vehicle> makeApiCallWithRetry(String brandCode) {
+    Flux<Vehicle> makeApiCallWithRetry(String brandCode) {
         return makeApiCall(brandCode)
                 .retryWhen(Retry.backoff(maxRetries, Duration.ofSeconds(5))
                         .jitter(0.5)
@@ -95,7 +96,7 @@ public class FipeApiAdapter implements FipeServicePort {
                 );
     }
 
-    private Flux<Vehicle> makeApiCall(String brandCode) {
+    Flux<Vehicle> makeApiCall(String brandCode) {
         return webClient.get()
                 .uri("/carros/marcas/{brandCode}/modelos", brandCode)
                 .header("User-Agent", USER_AGENT)
@@ -117,7 +118,7 @@ public class FipeApiAdapter implements FipeServicePort {
                 });
     }
 
-    private boolean shouldRetry(Throwable throwable) {
+    boolean shouldRetry(Throwable throwable) {
         if (throwable instanceof WebClientResponseException ex) {
             int statusCode = ex.getStatusCode().value();
             return statusCode == 429 || ex.getStatusCode().is5xxServerError();
@@ -125,9 +126,7 @@ public class FipeApiAdapter implements FipeServicePort {
         return throwable instanceof TimeoutException;
     }
 
-    private Vehicle mapToDomain(FipeVehicleResponse response, String brandCode) {
+    Vehicle mapToDomain(FipeVehicleResponse response, String brandCode) {
         return Vehicle.create(response.codigo(), brandCode, response.nome());
     }
-
-    private record FipeModelsWrapper(List<FipeVehicleResponse> modelos) {}
 }

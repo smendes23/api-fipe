@@ -1,4 +1,4 @@
-package br.com.fipe.gateway.application.ports;
+package br.com.fipe.gateway.application.ports.output;
 
 import reactor.core.publisher.Mono;
 

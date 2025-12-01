@@ -50,7 +50,7 @@ class CustomJsonSerializerAdapterTest {
         assertNotNull(result);
         String jsonString = new String(result);
         assertTrue(jsonString.contains("Event"));
-        assertTrue(jsonString.contains("2023-10-15")); // ISO format, not timestamp
+        assertTrue(jsonString.contains("2023-10-15"));
         assertTrue(jsonString.contains("14:30:00"));
     }
 
@@ -182,7 +182,6 @@ class CustomJsonSerializerAdapterTest {
     }
 
     static class EmptyObject {
-        // Empty object for testing
     }
 
     static class ComplexObject {
@@ -205,7 +204,7 @@ class CustomJsonSerializerAdapterTest {
         private ObjectWithCircularReference self;
 
         public ObjectWithCircularReference() {
-            this.self = this; // Circular reference that will cause serialization to fail
+            this.self = this;
         }
 
         public ObjectWithCircularReference getSelf() { return self; }

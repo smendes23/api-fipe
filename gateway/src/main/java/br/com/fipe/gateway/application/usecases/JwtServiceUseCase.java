@@ -1,6 +1,6 @@
 package br.com.fipe.gateway.application.usecases;
 
-import br.com.fipe.gateway.application.ports.JwtServicePort;
+import br.com.fipe.gateway.application.ports.input.JwtServicePort;
 import br.com.fipe.gateway.domain.dto.User;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

@@ -41,7 +41,7 @@ class JwtServiceUseCaseTest {
         jwtServiceUseCase = new JwtServiceUseCase(jwtEncoder, jwtDecoder);
 
         setField(jwtServiceUseCase, "issuer", "test-issuer");
-        setField(jwtServiceUseCase, "expiration", 3600000L); // 1 hora em milissegundos
+        setField(jwtServiceUseCase, "expiration", 3600000L);
 
         List<GrantedAuthority> authorities = Arrays.asList(
                 new SimpleGrantedAuthority("ROLE_USER"),

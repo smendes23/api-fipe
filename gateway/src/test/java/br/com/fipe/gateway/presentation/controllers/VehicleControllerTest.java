@@ -1,6 +1,6 @@
 package br.com.fipe.gateway.presentation.controllers;
 
-import br.com.fipe.gateway.application.ports.CommandServicePort;
+import br.com.fipe.gateway.application.ports.input.CommandServicePort;
 import br.com.fipe.gateway.config.TestSecurityConfig;
 import br.com.fipe.gateway.config.TestValidationConfig;
 import br.com.fipe.gateway.presentation.dto.request.UpdateVehicleRequest;

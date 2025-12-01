@@ -268,7 +268,7 @@ class UserServiceUseCaseTest {
 
         assertThat(result.getUsername()).isEqualTo("testuser");
         assertThat(result.getPassword()).isEqualTo("password");
-        assertThat(result.getRoles()).containsExactly(""); // Single empty string
+        assertThat(result.getRoles()).containsExactly("");
         assertThat(result.isEnabled()).isFalse();
     }
 

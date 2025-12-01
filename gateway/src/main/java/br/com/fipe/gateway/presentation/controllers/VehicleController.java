@@ -1,6 +1,6 @@
 package br.com.fipe.gateway.presentation.controllers;
 
-import br.com.fipe.gateway.application.ports.CommandServicePort;
+import br.com.fipe.gateway.application.ports.input.CommandServicePort;
 import br.com.fipe.gateway.presentation.dto.request.UpdateVehicleRequest;
 import br.com.fipe.gateway.presentation.dto.response.BrandResponse;
 import br.com.fipe.gateway.presentation.dto.response.VehicleResponse;

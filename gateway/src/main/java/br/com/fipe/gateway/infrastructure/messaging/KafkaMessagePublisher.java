@@ -1,6 +1,6 @@
 package br.com.fipe.gateway.infrastructure.messaging;
 
-import br.com.fipe.gateway.application.ports.MessagePublisherPort;
+import br.com.fipe.gateway.application.ports.output.MessagePublisherPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;

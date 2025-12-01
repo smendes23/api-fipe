@@ -1,4 +1,4 @@
-package br.com.fipe.gateway.application.ports;
+package br.com.fipe.gateway.application.ports.input;
 
 import br.com.fipe.gateway.domain.dto.User;
 import br.com.fipe.gateway.domain.entities.UserEntity;

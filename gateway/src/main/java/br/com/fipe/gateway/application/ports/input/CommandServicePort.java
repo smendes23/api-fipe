@@ -1,4 +1,4 @@
-package br.com.fipe.gateway.application.ports;
+package br.com.fipe.gateway.application.ports.input;
 
 import br.com.fipe.gateway.presentation.dto.request.UpdateVehicleRequest;
 import br.com.fipe.gateway.presentation.dto.response.BrandResponse;

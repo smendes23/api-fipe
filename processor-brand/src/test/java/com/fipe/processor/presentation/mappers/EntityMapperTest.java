@@ -26,17 +26,14 @@ class EntityMapperTest {
 
     @Test
     void toVehicleResponse_shouldMapVehicleToVehicleResponseSuccessfully() {
-        // Arrange
         when(mockVehicle.getId()).thenReturn(1L);
         when(mockVehicle.getCode()).thenReturn("X123");
         when(mockVehicle.getBrandCode()).thenReturn("BR456");
         when(mockVehicle.getModel()).thenReturn("Test Model");
         when(mockVehicle.getObservations()).thenReturn("Test Observations");
 
-        // Act
         VehicleResponse response = entityMapper.toVehicleResponse(mockVehicle);
 
-        // Assert
         assertNotNull(response);
         assertEquals(mockVehicle.getId(), response.id());
         assertEquals(mockVehicle.getCode(), response.code());
@@ -47,17 +44,14 @@ class EntityMapperTest {
 
     @Test
     void toVehicleResponse_shouldHandleNullObservations() {
-        // Arrange
         when(mockVehicle.getId()).thenReturn(2L);
         when(mockVehicle.getCode()).thenReturn("Y789");
         when(mockVehicle.getBrandCode()).thenReturn("BR123");
         when(mockVehicle.getModel()).thenReturn("Another Model");
         when(mockVehicle.getObservations()).thenReturn(null);
 
-        // Act
         VehicleResponse response = entityMapper.toVehicleResponse(mockVehicle);
 
-        // Assert
         assertNotNull(response);
         assertEquals(mockVehicle.getId(), response.id());
         assertEquals(mockVehicle.getCode(), response.code());
@@ -68,17 +62,14 @@ class EntityMapperTest {
 
     @Test
     void toVehicleResponse_shouldHandleMissingModel() {
-        // Arrange
         when(mockVehicle.getId()).thenReturn(3L);
         when(mockVehicle.getCode()).thenReturn("Z456");
         when(mockVehicle.getBrandCode()).thenReturn("BR987");
         when(mockVehicle.getModel()).thenReturn(null);
         when(mockVehicle.getObservations()).thenReturn("Some Observations");
 
-        // Act
         VehicleResponse response = entityMapper.toVehicleResponse(mockVehicle);
 
-        // Assert
         assertNotNull(response);
         assertEquals(mockVehicle.getId(), response.id());
         assertEquals(mockVehicle.getCode(), response.code());

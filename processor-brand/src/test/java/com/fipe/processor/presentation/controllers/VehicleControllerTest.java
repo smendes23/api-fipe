@@ -48,7 +48,6 @@ class VehicleControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Criar o controller manualmente
         controller = new VehicleController(
                 loadFipeDataUseCase,
                 getBrandsUseCase,
