@@ -3,24 +3,24 @@ package br.com.fipe.gateway.application.usecases;
 import br.com.fipe.gateway.domain.dto.User;
 import br.com.fipe.gateway.domain.entities.UserEntity;
 import br.com.fipe.gateway.domain.repositories.UserRepository;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceUseCaseTest {

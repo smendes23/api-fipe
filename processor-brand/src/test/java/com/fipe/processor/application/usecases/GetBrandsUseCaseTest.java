@@ -57,7 +57,6 @@ class GetBrandsUseCaseTest {
     @Test
     @DisplayName("Should retrieve brands from database and update cache when cache is empty")
     void shouldRetrieveBrandsFromDatabaseAndUpdateCache() {
-        // Arrange
         Brand brand1 = Brand.create("001", "Brand A");
         Brand brand2 = Brand.create("002", "Brand B");
         List<Brand> brands = Arrays.asList(brand1, brand2);
@@ -65,10 +64,8 @@ class GetBrandsUseCaseTest {
         when(brandRepository.findAllByOrderByNameAsc()).thenReturn(Flux.fromIterable(brands));
         when(cacheService.put(eq("brands:all"), eq(brands), eq(Duration.ofHours(1)))).thenReturn(Mono.empty());
 
-        // Act
         Flux<Brand> result = getBrandsUseCase.execute();
 
-        // Assert
         StepVerifier.create(result)
                 .expectNext(brand1, brand2)
                 .verifyComplete();
@@ -80,7 +77,6 @@ class GetBrandsUseCaseTest {
     @Test
     @DisplayName("Should handle error when retrieving data from cache and fallback to database")
     void shouldHandleCacheErrorAndFallbackToDatabase() {
-        // Arrange
         Brand brand1 = Brand.create("001", "Brand A");
         Brand brand2 = Brand.create("002", "Brand B");
         List<Brand> brands = Arrays.asList(brand1, brand2);
@@ -89,10 +85,8 @@ class GetBrandsUseCaseTest {
         when(brandRepository.findAllByOrderByNameAsc()).thenReturn(Flux.fromIterable(brands));
         when(cacheService.put(eq("brands:all"), eq(brands), eq(Duration.ofHours(1)))).thenReturn(Mono.empty());
 
-        // Act
         Flux<Brand> result = getBrandsUseCase.execute();
 
-        // Assert
         StepVerifier.create(result)
                 .expectNext(brand1, brand2)
                 .verifyComplete();
@@ -104,14 +98,11 @@ class GetBrandsUseCaseTest {
     @Test
     @DisplayName("Should return empty result when no brands are found in database")
     void shouldReturnEmptyResultWhenNoBrandsFound() {
-        // Arrange
         when(cacheService.get(eq("brands:all"), eq(Brand[].class))).thenReturn(Mono.empty());
         when(brandRepository.findAllByOrderByNameAsc()).thenReturn(Flux.empty());
 
-        // Act
         Flux<Brand> result = getBrandsUseCase.execute();
 
-        // Assert
         StepVerifier.create(result)
                 .verifyComplete();
         verify(cacheService, times(1)).get(eq("brands:all"), eq(Brand[].class));

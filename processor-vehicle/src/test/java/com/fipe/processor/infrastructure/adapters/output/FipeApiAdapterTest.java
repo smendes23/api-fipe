@@ -140,7 +140,7 @@ class FipeApiAdapterTest {
                 .expectError(WebClientResponseException.class)
                 .verify();
 
-        verify(webClient, times(1)).get(); // No retries for non-retryable errors
+        verify(webClient, times(1)).get();
     }
 
 

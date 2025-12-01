@@ -47,7 +47,7 @@ public class BrandMessageConsumer {
         log.info("Starting Kafka consumer for topic: {}", brandsTopic);
 
         this.subscription = kafkaReceiver.receive()
-                .publishOn(Schedulers.boundedElastic()) // Processamento fora da thread do Kafka
+                .publishOn(Schedulers.boundedElastic())
                 .doOnNext(record -> log.debug("Received message key: {}, offset: {}",
                         record.key(), record.offset()))
                 .concatMap(this::processMessageWithRetry)
@@ -79,7 +79,7 @@ public class BrandMessageConsumer {
                         })
                 )
                 .onErrorResume(error -> handlePermanentError(record, error))
-                .timeout(Duration.ofMinutes(10)) // Timeout de 10 minutos por mensagem
+                .timeout(Duration.ofMinutes(10))
                 .doOnSuccess(v -> log.debug("Successfully processed brand: {}", record.key()))
                 .doOnError(error -> log.error("Failed to process brand {}: {}", record.key(), error.getMessage()));
     }
@@ -92,7 +92,7 @@ public class BrandMessageConsumer {
                         return brandMessage;
                     } catch (Exception e) {
                         log.error("Error deserializing message for brand {}: {}", record.key(), e.getMessage());
-                        throw new MessageProcessingException("Invalid message format", e, false); // Não retryable
+                        throw new MessageProcessingException("Invalid message format", e, false);
                     }
                 })
                 .transformDeferred(RateLimiterOperator.of(fipeRateLimiter))
@@ -169,6 +169,4 @@ public class BrandMessageConsumer {
             log.info("Kafka consumer subscription disposed");
         }
     }
-
-
 }

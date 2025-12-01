@@ -64,7 +64,6 @@ class BrandMessagePublisherTest {
                 .thenAnswer(invocation -> {
                     Mono<SenderRecord<String, Object, String>> senderRecordMono = invocation.getArgument(0);
 
-                    // Verifica se o SenderRecord foi criado corretamente
                     StepVerifier.create(senderRecordMono)
                             .assertNext(senderRecord -> {
                                 ProducerRecord<String, Object> producerRecord = senderRecord;
@@ -166,7 +165,6 @@ class BrandMessagePublisherTest {
 
                     StepVerifier.create(senderRecordMono)
                             .assertNext(senderRecord -> {
-                                // SenderRecord implementa ProducerRecord, então podemos acessar diretamente
                                 assert senderRecord.topic().equals(topic);
                                 assert senderRecord.key().equals(key);
                                 assert senderRecord.value().equals(message);
@@ -200,7 +198,6 @@ class BrandMessagePublisherTest {
                 .thenAnswer(invocation -> {
                     Mono<SenderRecord<String, Object, String>> senderRecordMono = invocation.getArgument(0);
 
-                    // Captura e valida o SenderRecord
                     SenderRecord<String, Object, String> capturedRecord = senderRecordMono.block();
                     assert capturedRecord != null;
                     assert capturedRecord.topic().equals(topic);

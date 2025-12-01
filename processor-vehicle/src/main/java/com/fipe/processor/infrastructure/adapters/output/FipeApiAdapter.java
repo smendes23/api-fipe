@@ -5,7 +5,6 @@ import com.fipe.processor.domain.dto.FipeModelsWrapper;
 import com.fipe.processor.domain.entities.Vehicle;
 import com.fipe.processor.infrastructure.adapters.output.dto.FipeVehicleResponse;
 import java.time.Duration;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,7 +44,6 @@ public class FipeApiAdapter implements FipeServicePort {
         log.info("Fetching vehicles for brand {} from FIPE API", brandCode);
 
         return Mono.fromCallable(() -> brandCode)
-                // Rate limiting baseado no limite diário
                 .doOnNext(brand -> checkRateLimit())
                 .flatMapMany(this::makeApiCallWithRetry)
                 .doOnComplete(() -> log.info("Successfully fetched vehicles for brand {}", brandCode))

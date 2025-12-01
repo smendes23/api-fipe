@@ -154,7 +154,6 @@ class CustomJsonSerializerAdapterTest {
         assertArrayEquals(result1, result2, "Serialization should be independent of topic");
     }
 
-    // Test helper classes
     static class TestObject {
         private String name;
         private int age;

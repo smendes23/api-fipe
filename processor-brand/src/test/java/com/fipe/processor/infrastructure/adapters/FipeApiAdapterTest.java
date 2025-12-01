@@ -2,11 +2,8 @@ package com.fipe.processor.infrastructure.adapters;
 
 import com.fipe.processor.domain.entities.Brand;
 import com.fipe.processor.infrastructure.adapters.dto.FipeBrandResponse;
-import com.fipe.processor.infrastructure.adapters.mappers.DomainMapper;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,16 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -225,7 +217,7 @@ class FipeApiAdapterTest {
                 .assertNext(brand -> {
                     assertEquals("001", brand.getCode());
                     assertEquals("", brand.getName());
-                    assertFalse(brand.isValid()); // Should be invalid because name is empty
+                    assertFalse(brand.isValid());
                 })
                 .verifyComplete();
     }
